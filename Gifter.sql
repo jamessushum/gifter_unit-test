@@ -80,5 +80,8 @@ SET IDENTITY_INSERT [Comment] ON
 INSERT INTO [Comment]
   ([Id], [UserProfileId], [PostId], [Message])
 VALUES
-  (1, 2, 1, 'A comment is a comment is a comment');
+  (1, 2, 1, 'A comment is a comment is a comment'),
+  (2, 2, 2, 'so many comments'),
+  (3, 1, 1, 'so many, many comments'),
+  (4, 2, 1, 'This is another comment');
 SET IDENTITY_INSERT [Comment] OFF

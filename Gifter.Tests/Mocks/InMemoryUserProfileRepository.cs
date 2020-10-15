@@ -2,6 +2,7 @@
 using Gifter.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Gifter.Tests.Mocks
@@ -42,7 +43,7 @@ namespace Gifter.Tests.Mocks
 
         public UserProfile GetById(int id)
         {
-            throw new NotImplementedException();
+            return _data.FirstOrDefault(p => p.Id == id);
         }
 
         public UserProfile GetByIdWithPosts(int id)

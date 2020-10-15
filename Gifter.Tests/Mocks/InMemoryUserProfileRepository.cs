@@ -55,7 +55,17 @@ namespace Gifter.Tests.Mocks
 
         public void Update(UserProfile userProfile)
         {
-            throw new NotImplementedException();
+            var currentUserProfile = _data.FirstOrDefault(p => p.Id == userProfile.Id);
+            if (currentUserProfile == null)
+            {
+                return;
+            }
+
+            currentUserProfile.Name = userProfile.Name;
+            currentUserProfile.Email = userProfile.Email;
+            currentUserProfile.Bio = userProfile.Bio;
+            currentUserProfile.DateCreated = userProfile.DateCreated;
+            currentUserProfile.ImageUrl = userProfile.ImageUrl;
         }
     }
 }

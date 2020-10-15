@@ -4,6 +4,7 @@ using Gifter.Tests.Mocks;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -94,6 +95,68 @@ namespace Gifter.Tests
 
             // Assert
             Assert.Equal(userProfileCount + 1, repo.InternalData.Count);
+        }
+
+        [Fact]
+        public void Put_Method_Returns_BadRequest_When_Ids_Do_Not_Match()
+        {
+            // Arrange
+            var userProfiles = CreateTestUserProfiles(10);
+            var testUserProfileId = userProfiles[0].Id;
+
+            var repo = new InMemoryUserProfileRepository(userProfiles);
+            var controller = new UserProfileController(repo);
+
+            var userProfileToUpdate = new UserProfile()
+            {
+                Id = testUserProfileId,
+                Name = "Updated",
+                Email = "Updated",
+                Bio = "Updated",
+                DateCreated = DateTime.Today,
+                ImageUrl = "http://user.image.url/"
+            };
+            var someOtherUserProfileId = testUserProfileId + 1;
+
+            // Act
+            var result = controller.Put(someOtherUserProfileId, userProfileToUpdate);
+
+            // Assert
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Fact]
+        public void Put_Method_Updates_A_UserProfile()
+        {
+            // Arrange
+            var userProfiles = CreateTestUserProfiles(10);
+            var testUserProfileId = userProfiles[0].Id;
+
+            var repo = new InMemoryUserProfileRepository(userProfiles);
+            var controller = new UserProfileController(repo);
+
+            var userProfileToUpdate = new UserProfile()
+            {
+                Id = testUserProfileId,
+                Name = "Updated",
+                Email = "Updated",
+                Bio = "Updated",
+                DateCreated = DateTime.Today,
+                ImageUrl = "http://user.image.url/"
+            };
+
+            // Act
+            controller.Put(testUserProfileId, userProfileToUpdate);
+
+            // Assert
+            var userProfileFromDb = repo.InternalData.FirstOrDefault(p => p.Id == testUserProfileId);
+            Assert.NotNull(userProfileFromDb);
+
+            Assert.Equal(userProfileToUpdate.Name, userProfileFromDb.Name);
+            Assert.Equal(userProfileToUpdate.Email, userProfileFromDb.Email);
+            Assert.Equal(userProfileToUpdate.Bio, userProfileFromDb.Bio);
+            Assert.Equal(userProfileToUpdate.DateCreated, userProfileFromDb.DateCreated);
+            Assert.Equal(userProfileToUpdate.ImageUrl, userProfileFromDb.ImageUrl);
         }
 
         // Method creating/returning list of dummy user profiles depending on count

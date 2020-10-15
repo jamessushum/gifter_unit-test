@@ -70,6 +70,32 @@ namespace Gifter.Tests
             Assert.Equal(testUserProfileId, actualUserProfile.Id);
         }
 
+        [Fact]
+        public void Post_Method_Adds_A_New_UserProfile()
+        {
+            // Arrange
+            var userProfileCount = 10;
+            var userProfiles = CreateTestUserProfiles(userProfileCount);
+
+            var repo = new InMemoryUserProfileRepository(userProfiles);
+            var controller = new UserProfileController(repo);
+
+            // Act
+            var newUserProfile = new UserProfile()
+            {
+                Name = "Name",
+                Email = "Email",
+                Bio = "Bio",
+                DateCreated = DateTime.Today,
+                ImageUrl = "http://user.image.url/"
+            };
+
+            controller.Post(newUserProfile);
+
+            // Assert
+            Assert.Equal(userProfileCount + 1, repo.InternalData.Count);
+        }
+
         // Method creating/returning list of dummy user profiles depending on count
         private List<UserProfile> CreateTestUserProfiles(int count)
         {

@@ -28,7 +28,9 @@ namespace Gifter.Tests.Mocks
 
         public void Add(UserProfile userProfile)
         {
-            throw new NotImplementedException();
+            var lastUserProfile = _data.Last();
+            userProfile.Id = lastUserProfile.Id + 1;
+            _data.Add(userProfile);
         }
 
         public void Delete(int id)

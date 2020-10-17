@@ -45,7 +45,7 @@ namespace Gifter.Controllers
 
 
         [HttpPost]
-        public IActionResult UserProfile(UserProfile userProfile)
+        public IActionResult Post(UserProfile userProfile)
         {
             _userProfileRepository.Add(userProfile);
             return CreatedAtAction("Get", new { id = userProfile.Id }, userProfile);

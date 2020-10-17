@@ -35,7 +35,13 @@ namespace Gifter.Tests.Mocks
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var userProfileToDelete = _data.FirstOrDefault(p => p.Id == id);
+            if (userProfileToDelete == null)
+            {
+                return;
+            }
+
+            _data.Remove(userProfileToDelete);
         }
 
         public List<UserProfile> GetAll()

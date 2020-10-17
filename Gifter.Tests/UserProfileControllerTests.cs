@@ -159,6 +159,24 @@ namespace Gifter.Tests
             Assert.Equal(userProfileToUpdate.ImageUrl, userProfileFromDb.ImageUrl);
         }
 
+        [Fact]
+        public void Delete_Method_Removes_UserProfile()
+        {
+            // Arrange
+            var userProfiles = CreateTestUserProfiles(10);
+            var testUserProfileId = userProfiles[0].Id;
+
+            var repo = new InMemoryUserProfileRepository(userProfiles);
+            var controller = new UserProfileController(repo);
+
+            // Act
+            controller.Delete(testUserProfileId);
+
+            // Assert
+            var userProfileFromDb = repo.InternalData.FirstOrDefault(p => p.Id == testUserProfileId);
+            Assert.Null(userProfileFromDb);
+        }
+
         // Method creating/returning list of dummy user profiles depending on count
         private List<UserProfile> CreateTestUserProfiles(int count)
         {
